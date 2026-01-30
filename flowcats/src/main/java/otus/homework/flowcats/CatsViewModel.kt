@@ -23,18 +23,9 @@ class CatsViewModel(
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 catsRepository.listenForCatFacts()
-                    .catch { error ->
-                        _catsStateFlow.emit(
-                            Result.Error(
-                                error.message.orEmpty(),
-                            ),
-                        )
-                    }
                     .collect { fact ->
-                    _catsStateFlow.emit(
-                        Result.Success(fact),
-                    )
-                }
+                        _catsStateFlow.emit(fact)
+                    }
             }
         }
     }
